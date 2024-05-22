@@ -78,3 +78,6 @@ def process():
     
     #print(result["source_documents"])
     return jsonify({'diff':diff, 'result': result["result"]})
+    
+if __name__ == '__main__':
+    app.run(port=5000)
