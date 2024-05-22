@@ -5,3 +5,4 @@ langchain_openai==0.1.7
 Werkzeug==2.3.6
 langchain-community==0.2.0
 jsonify==0.5
+diff-match-patch==20200713
