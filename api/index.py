@@ -72,12 +72,9 @@ def process():
     
     #diff-match-patch
     dmp = diff_match_patch()
-    patches = dmp.patch_make(answer, result["result"])
-    diff = dmp.patch_toText(patches)
-    dmp.diffCleanupSemantic(diff)
+    dmp.Diff_EditCost = 4
+    diff = dmp.diff_main(answer, result["result"])
+    dmp.diff_cleanupSemantic(diff)
     
     #print(result["source_documents"])
     return jsonify({'diff':diff, 'result': result["result"]})
-    
-if __name__ == '__main__':
-    app.run(port=5000)
