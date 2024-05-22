@@ -5,7 +5,7 @@ Created on Tue May 21 20:42:10 2024
 @author: sanghwi
 """
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from langchain.vectorstores import Qdrant
 from langchain.embeddings.openai import OpenAIEmbeddings
 import qdrant_client
@@ -18,6 +18,11 @@ from langchain_openai import ChatOpenAI
 from langchain.chains import RetrievalQA
 
 app = Flask(__name__)
+
+@app.route('/')
+def home():
+   return render_template('index.html')
+
 
 @app.route('/rag_chat', methods=['POST'])
 def process():
