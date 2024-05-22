@@ -72,3 +72,5 @@ def process():
     #print(result["source_documents"])
     return jsonify({'result': result["result"]})
     
+if __name__ == '__main__':
+    app.run(port=5000)
