@@ -20,10 +20,10 @@ from langchain.chains import RetrievalQA
 from diff_match_patch import diff_match_patch
 
 app = Flask(__name__)
-#cors = CORS(app, resources={
-#    r"/*": {"origins": "https://resume-editor-frontend-indol.vercel.app/"}
-#}) 
-CORS(app) 
+
+# CORS 설정: 여러 도메인 허용
+origins = ["http://localhost:3000", "https://resume-editor-frontend-indol.vercel.app/"]
+CORS(app, resources={r"/*": {"origins": origins}})
 
 @app.route('/')
 def home():
@@ -55,7 +55,7 @@ def process():
     #vectorstore
     vectorstore = Qdrant(
         client=client,
-        collection_name="resume_detail",
+        collection_name="resume_all_1000",
         embeddings=embeddings
     )
 
