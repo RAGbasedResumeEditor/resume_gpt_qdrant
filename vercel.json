@@ -18,7 +18,7 @@
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "*"
+          "value": "https://resume-editor-frontend-indol.vercel.app/"
         },
         {
           "key": "Access-Control-Allow-Credentials",
