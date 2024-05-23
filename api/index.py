@@ -45,6 +45,8 @@ def process():
         api_key=os.environ["QDRANT_API_KEY"]
     )
     os.environ['OPENAI_API_KEY'] =os.environ["OPENAI_API_KEY"]
+    
+    #embedding
     embeddings = OpenAIEmbeddings()
 
 
