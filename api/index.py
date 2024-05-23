@@ -17,6 +17,7 @@ from diff_match_patch import diff_match_patch
 
 app = Flask(__name__)
 
+# vercel.json에서 전체 허용으로 설정
 # CORS 설정: 여러 도메인 허용
 origins = ["http://localhost:3000", "https://resume-editor-frontend-indol.vercel.app/"]
 CORS(app, resources={r"/*": {"origins": origins}})
