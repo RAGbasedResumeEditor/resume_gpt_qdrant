@@ -7,11 +7,11 @@ Created on Tue May 21 20:42:10 2024
 
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-from langchain.vectorstores import Qdrant
-from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain_qdrant import Qdrant
 import qdrant_client
 import os
 from langchain_openai import ChatOpenAI
+from langchain_openai import OpenAIEmbeddings
 from langchain.chains import RetrievalQA
 from diff_match_patch import diff_match_patch
 
@@ -75,7 +75,7 @@ def process():
     #prompt engineering
     query = f"###Instruction### 지금부터 자기소개 문항, 내가 작성한 자기소개 내용을 교차로 제공할거야. 너는 문항을 숙지해서 문항에 적절한 답변을 도출해야만 해. 다음 조건을 가진 자기소개서를 단계별로 생각해서 모든 텍스트를 개선해주고 답변은 첨삭된 내용만 보여줘 P1: 맞춤법을 검사합니다. P2: 장점과 경험을 더 드러낼 수 있는 문장으로 수정합니다. P3: Condition 4에 기재된 질문사항에 맞게 답변하도록 수정합니다. P4: 부자연스러운 문장을 수정합니다 Condition 4번에 해당하는 질문에 적합한 답변을 도출하면 Tip을 지불할게. ###Condition### 1. 종류: {status} 2. 회사: {company} 3. 업종: {occupation} 4. 문항 : {question} ###Content### {answer}"
 
-    result = qa_chain({"query": query})
+    result = qa_chain.invoke({"query": query})
     
     #diff-match-patch
     dmp = diff_match_patch()
