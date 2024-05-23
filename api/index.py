@@ -19,8 +19,9 @@ app = Flask(__name__)
 
 # vercel.json에서 전체 허용으로 설정
 # CORS 설정: 여러 도메인 허용
-origins = ["http://localhost:3000", "https://resume-editor-frontend-indol.vercel.app/"]
-CORS(app, resources={r"/*": {"origins": origins}})
+origins = ["https://resume-editor-frontend-indol.vercel.app"]
+headers = ['Content-Type', 'Authorization', 'Access-Control-Allow-Headers']
+CORS(app, resources={r"/*": {"origins": origins, "allow_headers": headers}})
 
 @app.route('/')
 def home():
