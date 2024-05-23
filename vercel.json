@@ -30,7 +30,7 @@
         },
         {
           "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type, Authorization"
+          "value": "Content-Type, Authorization, Access-Control-Allow-Headers, access"
         }
       ]
     }
