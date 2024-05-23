@@ -43,6 +43,8 @@ def home():
 
 @app.route('/rag_chat', methods=['POST','OPTIONS'])
 def process():
+    if request.method == 'OPTIONS':
+        return '', 200  # Preflight response must be HTTP 200 OK
     data = request.json
     
     # data parsing
