@@ -39,7 +39,7 @@ def process():
     answer = data.get("answer")
     model = data.get("model")
     temperature = data.get("temperature")
-    collection_name = data.get("collection")
+    collection_name = data.get("collection") if data.get("collection") else "resume_detail"
     
     # qdrant client
     client = qdrant_client.QdrantClient(
