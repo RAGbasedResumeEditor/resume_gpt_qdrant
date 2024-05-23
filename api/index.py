@@ -59,7 +59,7 @@ def process():
     )
 
     #OpenAI Model
-    llm = ChatOpenAI(model=model, temperature=temperature)
+    llm = ChatOpenAI(model=model, temperature=temperature) # 1.5부터 Internal Error 발생
 
     # Retriever 3개 까지
     retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
