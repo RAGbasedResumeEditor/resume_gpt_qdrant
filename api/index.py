@@ -20,9 +20,10 @@ from langchain.chains import RetrievalQA
 from diff_match_patch import diff_match_patch
 
 app = Flask(__name__)
-cors = CORS(app, resources={
-    r"/*": {"origins": "https://resume-editor-frontend-indol.vercel.app/"}
-}) 
+#cors = CORS(app, resources={
+#    r"/*": {"origins": "https://resume-editor-frontend-indol.vercel.app/"}
+#}) 
+CORS(app) 
 
 @app.route('/')
 def home():
