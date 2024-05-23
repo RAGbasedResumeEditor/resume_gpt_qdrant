@@ -11,11 +11,9 @@
       "src": "/(.*)",
       "dest": "/api/index.py",
       "headers": {
-	"Access-Control-Allow-Origin":"*"
+        "Access-Control-Allow-Origin": "*"
       }
     }
   ],
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/api/index" }
-  ]
+  "rewrites": [{ "source": "/(.*)", "destination": "/api/index" }]
 }
