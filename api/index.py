@@ -55,6 +55,7 @@ def process():
         embeddings=embeddings
     )
 
+    #OpenAI Model
     llm = ChatOpenAI(model=model, temperature=temperature)
 
     retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
