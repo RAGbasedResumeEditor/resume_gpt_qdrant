@@ -11,30 +11,14 @@ from langchain_qdrant import Qdrant
 import qdrant_client
 import os
 from langchain_openai import ChatOpenAI
-from langchain_openai import OpenAIEmbeddings
+# from langchain_openai import OpenAIEmbeddings
+from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.chains import RetrievalQA
 from diff_match_patch import diff_match_patch
 
 app = Flask(__name__)
 
 # vercel.json에서 전체 허용으로 설정
-# CORS 설정: 여러 도메인 허용
-# origins = ["https://resume-editor-frontend-indol.vercel.app"]
-# headers = [
-#     'Content-Type', 
-#     'Authorization', 
-#     'X-Requested-With', 
-#     'X-CSRF-Token', 
-#     'Accept', 
-#     'Accept-Version', 
-#     'Content-Length', 
-#     'Content-MD5', 
-#     'Date', 
-#     'X-Api-Version'
-# ]
-# methods = ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE', 'PATCH']
-
-# CORS(app, resources={r"/*": {"origins": origins, "allow_headers": headers, "methods": methods, "supports_credentials": True}})
 CORS(app)
 
 @app.route('/')
@@ -65,7 +49,7 @@ def process():
     os.environ['OPENAI_API_KEY'] =os.environ["OPENAI_API_KEY"]
     
     #embedding
-    embeddings = OpenAIEmbeddings()
+    embeddings = HuggingFaceEmbeddings()
 
 
     #vectorstore
