@@ -59,7 +59,7 @@ def process():
     )
 
     #OpenAI Model
-    llm = ChatOpenAI(model=model, temperature=temperature) # 0~1.3
+    llm = ChatOpenAI(model=model, temperature=temperature)
 
     # Retriever 3개 까지
     retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
