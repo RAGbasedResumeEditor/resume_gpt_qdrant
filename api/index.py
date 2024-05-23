@@ -11,8 +11,7 @@ from langchain_qdrant import Qdrant
 import qdrant_client
 import os
 from langchain_openai import ChatOpenAI
-# from langchain_openai import OpenAIEmbeddings
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_openai import OpenAIEmbeddings
 from langchain.chains import RetrievalQA
 from diff_match_patch import diff_match_patch
 
@@ -40,6 +39,7 @@ def process():
     answer = data.get("answer")
     model = data.get("model")
     temperature = data.get("temperature")
+    collection_name = data.get("collection")
     
     # qdrant client
     client = qdrant_client.QdrantClient(
@@ -49,13 +49,13 @@ def process():
     os.environ['OPENAI_API_KEY'] =os.environ["OPENAI_API_KEY"]
     
     #embedding
-    embeddings = HuggingFaceEmbeddings()
+    embeddings = OpenAIEmbeddings()
 
 
     #vectorstore
     vectorstore = Qdrant(
         client=client,
-        collection_name="resume_detail",
+        collection_name=collection_name,
         embeddings=embeddings
     )
 
