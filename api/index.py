@@ -58,6 +58,7 @@ def process():
     #OpenAI Model
     llm = ChatOpenAI(model=model, temperature=temperature)
 
+    # Retriever 3개 까지
     retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 
     # VectorDBQA 체인 생성
