@@ -41,7 +41,7 @@ def home():
    return render_template('index.html')
 
 
-@app.route('/rag_chat', methods=['POST'])
+@app.route('/rag_chat', methods=['POST','OPTIONS'])
 def process():
     data = request.json
     
