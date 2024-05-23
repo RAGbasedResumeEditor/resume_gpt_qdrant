@@ -8,8 +8,7 @@ Created on Tue May 21 20:42:10 2024
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from langchain.vectorstores import Qdrant
-#from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.embeddings.openai import OpenAIEmbeddings
 import qdrant_client
 import os
 #from dotenv import load_dotenv
@@ -50,13 +49,13 @@ def process():
         api_key=os.environ["QDRANT_API_KEY"]
     )
     os.environ['OPENAI_API_KEY'] =os.environ["OPENAI_API_KEY"]
-    embeddings = HuggingFaceEmbeddings()
+    embeddings = OpenAIEmbeddings()
 
 
     #vectorstore
     vectorstore = Qdrant(
         client=client,
-        collection_name="resume_all_1000",
+        collection_name="resume_detail",
         embeddings=embeddings
     )
 

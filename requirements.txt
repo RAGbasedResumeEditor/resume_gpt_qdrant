@@ -7,4 +7,3 @@ langchain-community==0.2.0
 jsonify==0.5
 diff-match-patch==20200713
 flask-cors==4.0.1
-sentence-transformers==2.7.0
