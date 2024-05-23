@@ -11,10 +11,6 @@ from langchain.vectorstores import Qdrant
 from langchain.embeddings.openai import OpenAIEmbeddings
 import qdrant_client
 import os
-#from dotenv import load_dotenv
-# API Key 정보 로드
-#load_dotenv()
-
 from langchain_openai import ChatOpenAI
 from langchain.chains import RetrievalQA
 from diff_match_patch import diff_match_patch
