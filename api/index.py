@@ -6,6 +6,7 @@ Created on Tue May 21 20:42:10 2024
 """
 
 from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 from langchain.vectorstores import Qdrant
 from langchain.embeddings.openai import OpenAIEmbeddings
 import qdrant_client
@@ -19,6 +20,9 @@ from langchain.chains import RetrievalQA
 from diff_match_patch import diff_match_patch
 
 app = Flask(__name__)
+cors = CORS(app, resources={
+    r"/*": {"origins": "https://resume-editor-frontend-indol.vercel.app/"}
+}) 
 
 @app.route('/')
 def home():
