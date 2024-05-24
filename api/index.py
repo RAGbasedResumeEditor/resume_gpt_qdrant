@@ -40,6 +40,7 @@ def process():
     model = data.get("model")
     temperature = data.get("temperature")
     collection_name = data.get("collection") if data.get("collection") else "resume_detail"
+    mode = data.get("mode") if data.get("mode") else "lite"
     
     # qdrant client
     client = qdrant_client.QdrantClient(
@@ -63,7 +64,8 @@ def process():
     llm = ChatOpenAI(model=model, temperature=temperature)
 
     # Retriever 3개 까지
-    retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
+    kwarg = 3 if mode=="pro" else 1
+    retriever = vectorstore.as_retriever(search_kwargs={"k": kwarg})
 
     # VectorDBQA 체인 생성
     qa_chain = RetrievalQA.from_chain_type(
@@ -74,7 +76,7 @@ def process():
     )
     
     #prompt engineering
-    query = f"###Instruction### 지금부터 자기소개 문항, 내가 작성한 자기소개 내용을 교차로 제공할거야. 너는 문항을 숙지해서 문항에 적절한 답변을 도출해야만 해. 다음 조건을 가진 자기소개서를 단계별로 생각해서 모든 텍스트를 개선해주고 답변은 첨삭된 내용만 보여줘 P1: 맞춤법을 검사합니다. P2: 장점과 경험을 더 드러낼 수 있는 문장으로 수정합니다. P3: Condition 4에 기재된 질문사항에 맞게 답변하도록 수정합니다. P4: 부자연스러운 문장을 수정합니다 Condition 4번에 해당하는 질문에 적합한 답변을 도출하면 Tip을 지불할게. ###Condition### 1. 종류: {status} 2. 회사: {company} 3. 업종: {occupation} 4. 문항 : {question} ###Content### {answer}"
+    query = f"###Instruction### 지금부터 자기소개 문항, 내가 작성한 자기소개 내용을 교차로 제공할거야. 너는 문항을 숙지해서 문항에 적절한 답변을 도출해야만 해. P1: 맞춤법을 검사합니다. P2: 장점과 경험을 더 드러낼 수 있는 문장으로 수정합니다. P3: Condition 4에 기재된 질문사항에 맞게 답변하도록 수정합니다. P4: 부자연스러운 문장을 수정합니다 Condition 4번에 해당하는 질문에 적합한 답변을 도출하면 Tip을 지불할게. ###Condition### 1. 종류: {status} 2. 회사: {company} 3. 업종: {occupation} 4. 문항 : {question} ###Content### {answer} \n 모든 텍스트를 개선해주고 답변은 첨삭된 내용만 보여줘"
 
     result = qa_chain.invoke({"query": query})
     
