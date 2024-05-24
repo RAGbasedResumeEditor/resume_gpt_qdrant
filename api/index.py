@@ -37,7 +37,8 @@ def process():
     occupation = data.get("occupation")
     question=data.get("question")
     content = data.get("answer")
-    model = data.get("model")
+    # model = data.get("model")
+    model = 'ft:gpt-3.5-turbo-0125:personal::9SQnVTS4'
     temperature = data.get("temperature")
     collection_name = data.get("collection") if data.get("collection") else "resume_detail"
     mode = data.get("mode") if data.get("mode") else "lite"
@@ -76,8 +77,8 @@ def process():
     )
     
     #prompt engineering
-    query = f"Instruction: 지금부터 자기소개 문항, 내가 작성한 자기소개 내용을 교차로 제공할거야. 너는 문항을 숙지해서 문항에 적절한 답변을 도출해야만 해. P1: 맞춤법을 검사합니다. P2: 장점과 경험을 더 드러낼 수 있는 문장으로 수정합니다. P3: 문항에 기재된 질문사항에 맞게 답변하도록 수정합니다. P4: 부자연스러운 문장을 수정합니다. \n문항에 해당하는 질문에 적합한 답변을 도출하면 Tip을 지불할게. Condition: 1. 종류: {status} 2. 회사: {company} 3. 업종: {occupation} 4. 문항 : {question} \n Content: {content} \n 모든 텍스트를 개선해주고 답변은 첨삭된 내용만 보여줘 \n Output: 수정된 자소서: "
-    
+    query = f"Instruction: 자기소개서를 첨삭해줘. P1: 장점과 경험을 더 드러낼 수 있는 문장으로 수정합니다. P2: 문항에 기재된 질문사항에 맞게 답변하도록 수정합니다. P3: 부자연스러운 문장을 수정합니다. Condition: 1. 종류: {status} 2. 회사: {company} 3. 업종: {occupation} 4. 문항 : {question} \n Content: {content} \n 실명이 있다면 지워줘. "
+
 
     result = qa_chain.invoke({"query": query})
     
