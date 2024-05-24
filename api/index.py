@@ -36,7 +36,7 @@ def process():
     company = data.get("company")
     occupation = data.get("occupation")
     question=data.get("question")
-    answer = data.get("answer")
+    content = data.get("answer")
     model = data.get("model")
     temperature = data.get("temperature")
     collection_name = data.get("collection") if data.get("collection") else "resume_detail"
@@ -76,14 +76,14 @@ def process():
     )
     
     #prompt engineering
-    query = f"Instruction: 지금부터 자기소개 문항, 내가 작성한 자기소개 내용을 교차로 제공할거야. 너는 문항을 숙지해서 문항에 적절한 답변을 도출해야만 해. P1: 맞춤법을 검사합니다. P2: 장점과 경험을 더 드러낼 수 있는 문장으로 수정합니다. P3: Condition 4에 기재된 질문사항에 맞게 답변하도록 수정합니다. P4: 부자연스러운 문장을 수정합니다 Condition 4번에 해당하는 질문에 적합한 답변을 도출하면 Tip을 지불할게. Condition: 1. 종류: {status} 2. 회사: {company} 3. 업종: {occupation} 4. 문항 : {question} Content: {answer} \n 모든 텍스트를 개선해주고 답변은 첨삭된 내용만 보여줘"
+    query = f"Instruction: 지금부터 자기소개 문항, 내가 작성한 자기소개 내용을 교차로 제공할거야. 너는 문항을 숙지해서 문항에 적절한 답변을 도출해야만 해. P1: 맞춤법을 검사합니다. P2: 장점과 경험을 더 드러낼 수 있는 문장으로 수정합니다. P3: Condition 4에 기재된 질문사항에 맞게 답변하도록 수정합니다. P4: 부자연스러운 문장을 수정합니다 Condition 4번에 해당하는 질문에 적합한 답변을 도출하면 Tip을 지불할게. Condition: 1. 종류: {status} 2. 회사: {company} 3. 업종: {occupation} 4. 문항 : {question} Content: {content} \n 모든 텍스트를 개선해주고 답변은 첨삭된 내용만 보여줘 Answer:"
 
     result = qa_chain.invoke({"query": query})
     
     #diff-match-patch
     dmp = diff_match_patch()
     dmp.Diff_EditCost = 4
-    diff = dmp.diff_main(answer, result["result"])
+    diff = dmp.diff_main(content, result["result"])
     dmp.diff_cleanupSemantic(diff)
     
     #print(result["source_documents"])
