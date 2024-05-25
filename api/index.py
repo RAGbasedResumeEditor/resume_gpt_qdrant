@@ -37,8 +37,8 @@ def process():
     occupation = data.get("occupation")
     question=data.get("question")
     content = data.get("answer")
-    # model = data.get("model")
-    model = 'ft:gpt-3.5-turbo-0125:teamproject:reditor:9SRYYNZ1'
+    model = data.get("model")
+    # model = 'ft:gpt-3.5-turbo-0125:teamproject:reditor:9SRYYNZ1'
     temperature = data.get("temperature")
     collection_name = data.get("collection") if data.get("collection") else "resume_detail"
     mode = data.get("mode") if data.get("mode") else "lite"
@@ -77,7 +77,8 @@ def process():
     )
     
     #prompt engineering
-    query = f"Instruction: 자기소개서를 첨삭해줘. P1: 장점과 경험을 더 드러낼 수 있는 문장으로 수정합니다. P2: 문항에 기재된 질문사항에 맞게 답변하도록 수정합니다. P3: 부자연스러운 문장을 수정합니다. Condition: 1. 종류: {status} 2. 회사: {company} 3. 업종: {occupation} 4. 문항 : {question} \n Content: {content} \n 실명이 있다면 지워줘. "
+    # query = f"Instruction: 자기소개서를 단계별로 첨삭해줘. P1: 장점과 경험을 더 드러낼 수 있는 문장으로 수정합니다. P2: 문항에 기재된 질문사항에 맞게 답변하도록 수정합니다. P3: 부자연스러운 문장을 수정합니다. Condition: 1. 종류: {status} 2. 회사: {company} 3. 업종: {occupation} 4. 문항 : {question} \n Content: {content} \n"
+    query = f"""다음 자기소개서를 단계별로 첨삭해주고 실명이 포함되어 있다면 삭제해줘. 1단계: 장점과 경험을 더 드러낼 수 있는 문장으로 수정합니다. 2단계: 문항에 기재된 질문사항에 맞게 답변하도록 수정합니다. 3단계: 부자연스러운 문장을 수정합니다. 답변은 최종 수정된 내용만 보여줘 Condition: 1. 종류: {status} 2. 회사: {company} 3. 업종: {occupation} 4. 문항 : {question}\n Content: {content}\n\n"""
 
 
     result = qa_chain.invoke({"query": query})
