@@ -37,8 +37,8 @@ def process():
     occupation = data.get("occupation")
     question=data.get("question")
     content = data.get("answer")
-    model = data.get("model")
-    # model = 'ft:gpt-3.5-turbo-0125:teamproject:reditor:9SRYYNZ1'
+    # model = data.get("model")
+    model = 'ft:gpt-3.5-turbo-0125:personal:reditor:9TA99N5H'
     temperature = data.get("temperature")
     collection_name = data.get("collection") if data.get("collection") else "resume_detail"
     mode = data.get("mode") if data.get("mode") else "lite"
