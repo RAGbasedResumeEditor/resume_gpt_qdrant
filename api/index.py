@@ -38,7 +38,7 @@ def process():
     question=data.get("question")
     content = data.get("answer")
     # model = data.get("model")
-    model = 'ft:gpt-3.5-turbo-0125:personal:reditor:9TA99N5H'
+    model = 'ft:gpt-3.5-turbo-0125:personal:reditor:9TBncHsL'
     temperature = data.get("temperature")
     collection_name = data.get("collection") if data.get("collection") else "resume_detail"
     mode = data.get("mode") if data.get("mode") else "lite"
@@ -65,7 +65,7 @@ def process():
     llm = ChatOpenAI(model=model, temperature=temperature)
 
     # Retriever 3개 까지
-    kwarg = 3 if mode=="pro" else 1
+    kwarg = 5 if mode=="pro" else 3
     retriever = vectorstore.as_retriever(search_kwargs={"k": kwarg})
 
     # VectorDBQA 체인 생성
