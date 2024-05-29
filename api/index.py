@@ -128,7 +128,7 @@ def process():
         dmp.diff_cleanupSemantic(diff)
         
         #print(result["source_documents"])
-        return jsonify({'status':'Success','diff':diff, 'result': result["result"]})
+        return jsonify({'status':'Success','diff':diff, 'result': result["result"]+"\n\n*"+technique+" 방식으로 작성된 자소서 입니다."})
     except Exception as e:
         return jsonify({'status':'Fail', 'error':str(e)}),500
         
