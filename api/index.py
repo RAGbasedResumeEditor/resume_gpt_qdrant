@@ -39,12 +39,13 @@ def rag_chat_setting():
         awards = data.get("awards")
         experiences = data.get("experiences")
     
+        result = f"status: {status}, company:{company}, occupation:{occupation}, questions: {questions}, awards:{awards}, experiences:{experiences}"
         # OpenAI Model
         llm = ChatOpenAI(
             model="gpt-4o",
             temperature=1.0
         )
-        return jsonify({"status": "Success", "result":"OK"}), 200
+        return jsonify({"status": "Success", "result":result}), 200
     except Exception as e:
         return jsonify({'status':'Fail', 'error':str(e)}),500
 
