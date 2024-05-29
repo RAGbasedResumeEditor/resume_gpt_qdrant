@@ -25,27 +25,63 @@ def home():
    return render_template('index.html')
 
 @app.route('/resume_guide', methods=['POST','OPTIONS'])
-def rag_chat_setting():
+def resume_guide():
     if request.method == 'OPTIONS':
         return '', 200  # Preflight response must be HTTP 200 OK
     try:
         data = request.json
         
         # data parsing
-        status = data.get("status")
         company = data.get("company")
         occupation = data.get("occupation")
         questions=data.get("questions")
         awards = data.get("awards")
         experiences = data.get("experiences")
     
-        result = f"status: {status}, company:{company}, occupation:{occupation}, questions: {questions}, awards:{awards}, experiences:{experiences}"
+        
+        
+        # qdrant client
+        client = qdrant_client.QdrantClient(
+            os.environ["QDRANT_HOST"],
+            api_key=os.environ["QDRANT_API_KEY"]
+        )
+        os.environ['OPENAI_API_KEY'] =os.environ["OPENAI_API_KEY"]
+        
+        #embedding
+        embeddings = OpenAIEmbeddings()
+    
+        #vectorstore
+        vectorstore = Qdrant(
+            client=client,
+            collection_name="resume_all_1536",
+            embeddings=embeddings
+        )
+    
+        
         # OpenAI Model
         llm = ChatOpenAI(
             model="gpt-4o",
             temperature=1.0
         )
-        return jsonify({"status": "Success", "result":result}), 200
+        
+        retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
+        
+        qa_chain = RetrievalQA.from_chain_type(
+            llm=llm,
+            chain_type="stuff",
+            retriever=retriever,
+            return_source_documents=True
+        )
+        query = f""" 다음 조건에 맞게 자기소개서 가이드를 작성할 거야 조건은 다음과 같아.
+        회사: {company}, 희망 직무: {occupation}
+        질문 리스트: {questions}, 수상 내역:{awards}, 직무 관련 경험:{experiences}
+        가이드는 다음과 같은 순서로 진행 돼. 순차적으로 수행해 줘.
+        1. 자기소개서 문항을 순서대로 적는다.
+        2. 각 순서의 자기소개 문항마다 소재로 삼으면 좋을 수상 경력 혹은 직무 관련 경험을 골라서 내용만 그대로 기재한다.(복수 선택 가능)
+        3. 해당 경험을 어떤 식으로 적으면 좋을 지 간단한 예시를 보여준다.
+        """
+        result = qa_chain.invoke({"query": query})
+        return jsonify({"status": "Success", "result":result["result"]}), 200
     except Exception as e:
         return jsonify({'status':'Fail', 'error':str(e)}),500
 
