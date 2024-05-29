@@ -28,34 +28,27 @@ def home():
 def rag_chat_setting():
     if request.method == 'OPTIONS':
         return '', 200  # Preflight response must be HTTP 200 OK
-    # 환경 변수에서 Qdrant 및 OpenAI API 키 설정
-    os.environ["QDRANT_HOST"] = request.args.get("QDRANT_HOST")
-    os.environ["QDRANT_API_KEY"] = request.args.get("QDRANT_API_KEY")
-    os.environ["OPENAI_API_KEY"] = request.args.get("OPENAI_API_KEY")
+    try:
+        data = request.json
+        
+        # data parsing
+        status = data.get("status")
+        company = data.get("company")
+        occupation = data.get("occupation")
+        questions=data.get("questions")
+        awards = data.get("awards")
+        experiences = data.get("experiences")
     
-    # qdrant client
-    g.client = qdrant_client.QdrantClient(
-        os.environ["QDRANT_HOST"],
-        api_key=os.environ["QDRANT_API_KEY"]
-    )
-    
-    # embedding
-    g.embeddings = OpenAIEmbeddings()
-    
-    # vectorstore
-    g.vectorstore = Qdrant(
-        client=g.client,
-        collection_name=request.args.get("collection_name", "resume_detail"),
-        embeddings=g.embeddings
-    )
-    
-    # OpenAI Model
-    g.llm = ChatOpenAI(
-        model=request.args.get("model"),
-        temperature=float(request.args.get("temperature", 0.7))
-    )
+        # OpenAI Model
+        llm = ChatOpenAI(
+            model="gpt-4o",
+            temperature=1.0
+        )
+        return jsonify({"status": "Success", "result":"OK"}), 200
+    except Exception as e:
+        return jsonify({'status':'Fail', 'error':str(e)}),500
 
-    return jsonify({"message": "Settings stored successfully"}), 200
+    
 
 @app.route('/rag_chat', methods=['POST','OPTIONS'])
 def process():
@@ -128,7 +121,7 @@ def process():
         dmp.diff_cleanupSemantic(diff)
         
         #print(result["source_documents"])
-        return jsonify({'status':'Success','diff':diff, 'result': result["result"]+"\n\n*"+technique+" 방식으로 작성된 자소서 입니다."})
+        return jsonify({'status':'Success','diff':diff, 'result': result["result"]+"\n\n\n*"+technique+" 방식으로 작성된 자소서 입니다."})
     except Exception as e:
         return jsonify({'status':'Fail', 'error':str(e)}),500
         
