@@ -114,8 +114,8 @@ def process():
         #prompt engineering
         if technique == "normal":
             query = f"""다음 자기소개서를 단계별로 첨삭해주고 실명이 포함되어 있다면 삭제해줘. 1단계: 장점과 경험을 더 드러낼 수 있는 문장으로 수정합니다. 2단계: 문항에 기재된 질문사항에 맞게 답변하도록 수정합니다. 3단계: 부자연스러운 문장을 수정합니다. 답변은 최종 수정된 내용만 보여줘 Condition: 1. 종류: {status} 2. 회사: {company} 3. 업종: {occupation} 4. 문항 : {question}\n Content: {content}\n\n"""
-        elif technique == "star":
-            query = f"""다음 조건에 맞는 자기소개서를 STAR 기법을 적용하여 수정해주고 소제목 없이 자연스럽게 연결해줘. 답변은 수정된 내용만 출력해줘. Condition: 1. 종류: {status} 2. 회사: {company} 3. 업종: {occupation} 4. 문항 : {question}\n Content: {content}\n\n """
+        else:
+            query = f"""다음 조건에 맞는 자기소개서를 {technique}기법을 적용하여 수정해주고 소제목 없이 자연스럽게 연결해줘. 답변은 수정된 내용만 출력해줘. Condition: 1. 종류: {status} 2. 회사: {company} 3. 업종: {occupation} 4. 문항 : {question}\n Content: {content}\n\n """
     
     
         result = qa_chain.invoke({"query": query})
