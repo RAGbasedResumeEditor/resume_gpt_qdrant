@@ -35,9 +35,12 @@ def resume_guide():
         status = data.get("status")
         company = data.get("company")
         occupation = data.get("occupation")
-        questions='\n'.join([list(item.values())[0] for item in data.get("questions")])
-        awards = '\n'.join([list(item.values())[0] for item in data.get("awards")])
-        experiences = '\n'.join([list(item.values())[0] for item in data.get("experiences")])
+        question_list = [list(item.values())[0] for item in data.get("questions")]
+        award_list = [list(item.values())[0] for item in data.get("awards")] if data.get("awards") else "Empty"
+        experience_list = [list(item.values())[0] for item in data.get("experiences")] if data.get("experiences") else "Empty"
+        questions='\n'.join(question_list)
+        awards = '\n'.join(award_list)
+        experiences = '\n'.join(experience_list)
 
         # qdrant client
         client = qdrant_client.QdrantClient(
