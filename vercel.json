@@ -37,7 +37,7 @@
   ],
   "regions": ["icn1"],
   "functions": {
-    "app/api/**/*": {
+    "api/index.py": {
       "maxDuration": 300
     }
   }
