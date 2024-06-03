@@ -19,7 +19,6 @@ app = Flask(__name__)
 
 # vercel.json에서 전체 허용으로 설정
 CORS(app)
-
 @app.route('/')
 def home():
    return render_template('index.html')
