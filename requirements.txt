@@ -8,3 +8,6 @@ Werkzeug==2.3.6
 langchain-community==0.2.0
 jsonify==0.5
 diff-match-patch==20200713
+beautifulsoup==4.12.2
+requests==2.31.0
+lxml==4.9.3

@@ -14,6 +14,8 @@ from langchain_openai import ChatOpenAI
 from langchain_openai import OpenAIEmbeddings
 from langchain.chains import RetrievalQA
 from diff_match_patch import diff_match_patch
+from bs4 import BeautifulSoup
+import requests
 
 app = Flask(__name__)
 
@@ -160,6 +162,82 @@ def process():
         return jsonify({'status':'Success','diff':diff, 'result': result["result"]+"\n\n\n*"+technique+" 방식으로 작성된 자소서 입니다."})
     except Exception as e:
         return jsonify({'status':'Fail', 'error':str(e)}),500
+    
+@app.route('/job_search', methods=['POST', 'OPTIONS'])
+def job_search():
+    if request.method == 'OPTIONS':
+        return '', 200  # Preflight response must be HTTP 200 OK
+    try:
+        data = request.json
         
+        # data parsing
+        salTp = data.get("salTp")
+        minPay = data.get("minPay")
+        maxPay = data.get("maxPay")
+        career=data.get("career")
+        keyword = data.get("keyword")
+        education = data.get("education")
+        
+        url = "http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey="
+        serviceKey = os.environ['WORKNET_API_KEY']
+        Calltp = "&callTp=L"
+        Return = "&returnType=XML"
+        StartPage="&startPage=1"
+        empTpGb="&empTpGb=1"
+        # 끝 1095page
+        Display = "&display=100"
+        option = f"&education={education}&salTp={salTp}&minPay={minPay}&maxPay={maxPay}&career={career}&keyword={keyword}"
+        
+        def parse():
+            try:
+                COMPANY = wanted.find("company").get_text()
+                TITLE = wanted.find("title").get_text()
+                SAL_TMNM = wanted.find("salTpNm").get_text()
+                SAL = wanted.find("sal").get_text()
+                REGION = wanted.find("region").get_text()
+                HOLIDAY_TPNM = wanted.find("holidayTpNm").get_text()
+                MIN_DEUBG = wanted.find("minEdubg").get_text()
+                CAREER = wanted.find("career").get_text()
+                regDt = wanted.find("regDt").get_text()
+                jobsCd = wanted.find("jobsCd").get_text()
+                return {
+                    "회사명":COMPANY,
+                    "체용제목":TITLE,
+                    "임금형태":SAL_TMNM,
+                    "급여":SAL,
+                    "근무지역":REGION,
+                    "근무형태":HOLIDAY_TPNM,
+                    "최소학력":MIN_DEUBG,
+                    "경력":CAREER,
+                    "등록일자":regDt,
+                    "직종코드":jobsCd
+                }
+            except:
+                return {
+                    "회사명":None,
+                    "체용제목":None,
+                    "임금형태":None,
+                    "급여":None,
+                    "근무지역":None,
+                    "근무형태":None,
+                    "최소학력":None,
+                    "경력":None,
+                    "직종코드":None,
+                    "우대조건":None
+                }
+            
+        #parsing 하기
+        result = requests.get(url+serviceKey+Calltp+Return+StartPage+empTpGb+Display+option)
+        soup = BeautifulSoup(result.text,'lxml-xml')
+        wanteds = soup.find_all("wanted")
+         
+        row = []
+        for wanted in wanteds:
+            row.append(parse()) 
+            
+        return jsonify({'status':'Success'}),200
+    except Exception as e:
+        return jsonify({'status':'Fail', 'error':str(e)}),500
+    
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(host='localhost', port=5000)
