@@ -16,6 +16,9 @@ from langchain.chains import RetrievalQA
 from diff_match_patch import diff_match_patch
 from bs4 import BeautifulSoup
 import requests
+import random
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -235,7 +238,26 @@ def job_search():
         for wanted in wanteds:
             row.append(parse()) 
             
-        return jsonify({'status':'Success'}),200
+        return jsonify({"status":"Success","result":row}),200
+    except Exception as e:
+        return jsonify({'status':'Fail', 'error':str(e)}),500
+    
+    
+@app.route('/social_enterprise', methods=['GET', 'OPTIONS'])
+def social_enterprise():
+    if request.method == 'OPTIONS':
+        return '', 200  # Preflight response must be HTTP 200 OK
+    try:
+        page = random.randint(0,6500)
+        serviceKey = os.environ["SOCIAL_ENTERPRISE_API_KEY"]
+        url = f"https://api.odcloud.kr/api/socialEnterpriseList/v1/authCompanyList?page={page}&perPage=1&serviceKey={serviceKey}"
+        response = requests.get(url)
+    
+        if response.status_code == 200:
+            data = response.json()
+            return jsonify(data)
+        else:
+            return jsonify({"status": "Error"}), response.status_code
     except Exception as e:
         return jsonify({'status':'Fail', 'error':str(e)}),500
     
